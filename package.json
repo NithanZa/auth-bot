@@ -1,6 +1,6 @@
 {
   "type": "commonjs",
-  "name": "lambda-auth-bot",
+  "name": "auth-bot",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
