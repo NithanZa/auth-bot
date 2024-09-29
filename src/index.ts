@@ -15,8 +15,8 @@ interface ConfigJson {
 const configJson: ConfigJson = require("../config.json");
 
 const app: Express = express()
-const port = 3000
 require('dotenv').config()
+const port = process.env.PORT
 
 const otpSecret = process.env.OTP_SECRET!
 
@@ -73,7 +73,6 @@ const handleEvent = (event) => {
             let response: Promise<line.messagingApi.ReplyMessageResponse> | null = null;
             client.getProfile(userId)
             .then((profile) => {
-                const userId: string = event.source.userId;
                 if (!configJson.userIds.includes(userId)) {
                     configJson.userIds.push(userId);
 
@@ -146,7 +145,7 @@ const handleEvent = (event) => {
             if (event.source.type === "user") {
                 replyOtp(event.replyToken);
             } else if (event.source.type === "group") {
-                if (event.message.text === "lambda allow group") {
+                if (event.message.text === `${process.env.PREFIX} allow group`) {
                     const groupId: string = event.source.groupId;
                     if (!configJson.groupIds.includes(groupId)) {
                         configJson.groupIds.push(groupId);
@@ -173,7 +172,7 @@ const handleEvent = (event) => {
                             ]
                         });
                     }
-                } else if (event.message.text === "lambda disallow group") {
+                } else if (event.message.text === `${process.env.PREFIX} disallow group`) {
                     const groupId: string = event.source.groupId;
                     const index = configJson.groupIds.indexOf(groupId)
                     
@@ -229,7 +228,7 @@ const handleEvent = (event) => {
                             messages: [
                                 {
                                     "type": "text",
-                                    "text": `Allow? Name: ${profile.displayName} ID: ${userId}`
+                                    "text": `Allow? Name: ${profile.displayName}, ID: ${userId}`
                                 }
                             ]
                         })
@@ -256,7 +255,7 @@ const handleEvent = (event) => {
                 })
             }
         }
-        if (event.message.text === "lambda otp" && event.source.type === "group") {
+        if (event.message.text === `${process.env.PREFIX} otp` && event.source.type === "group") {
             if (configJson.groupIds.includes(event.source.groupId)) {
                 replyOtp(event.replyToken);
             } else {
@@ -265,7 +264,7 @@ const handleEvent = (event) => {
                     messages: [
                         {
                             "type": "text",
-                            "text": "This group isn't allowed to use lambda otp."
+                            "text": `This group isn't allowed to use ${process.env.PREFIX} otp.`
                         }
                     ]
                 });
