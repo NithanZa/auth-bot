@@ -2,7 +2,7 @@ import fs from "fs"
 import express, { Express, Request, Response } from "express";
 import * as line from '@line/bot-sdk'
 import { authenticator } from "otplib"
-import https from 'https'
+// import https from 'https'
 
 interface ConfigJson {
     userIds: string[];
