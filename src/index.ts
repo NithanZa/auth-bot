@@ -2,7 +2,6 @@ import fs from "fs"
 import express, { Express, Request, Response } from "express";
 import * as line from '@line/bot-sdk'
 import { authenticator } from "otplib"
-// import https from 'https'
 
 interface ConfigJson {
     userIds: string[];
@@ -16,18 +15,8 @@ interface ConfigJson {
 const configJson: ConfigJson = require("../config.json");
 
 const app: Express = express()
-require('dotenv').config()
+// require('dotenv').config()
 const port = process.env.PORT
-
-/* https
-const key = fs.readFileSync(__dirname + '/../certs/selfsigned.key');
-const cert = fs.readFileSync(__dirname + '/../certs/selfsigned.crt');
-const options = {
-  key: key,
-  cert: cert
-};
-const server = https.createServer(options, app)
-*/
 
 
 const otpSecret = process.env.OTP_SECRET!
@@ -293,4 +282,3 @@ app.get('/', (req: Request, res: Response) => {
 
 setInterval(cleanUpCooldowns, 5 * 60 * 1000);
 app.listen(port, () => console.log(`Start server on port ${port}`))
-// server.listen(port, () => console.log(`Start server on port ${port}`))
